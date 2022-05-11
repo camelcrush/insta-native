@@ -4,6 +4,7 @@ import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { Appearance } from "react-native";
 import LoggedOutNav from "./navigators/LoggedOutNav";
 
 export default function App() {

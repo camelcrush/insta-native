@@ -2,9 +2,9 @@ import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import { Asset } from "expo-asset";
 import { Ionicons } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import LoggedOutNav from "./navigators/LoggedOutNav";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -29,18 +29,8 @@ export default function App() {
     );
   }
   return (
-    <View style={styles.container}>
-      <Text>!!!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <LoggedOutNav />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

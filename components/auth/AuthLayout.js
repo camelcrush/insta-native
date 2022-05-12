@@ -1,5 +1,6 @@
 import React from "react";
 import { KeyboardAvoidingView } from "react-native";
+import { Platform } from "react-native";
 import { Keyboard } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
@@ -25,7 +26,10 @@ export default function AuthLayout({ children }) {
     Keyboard.dismiss();
   };
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
+    <TouchableWithoutFeedback
+      onPress={dismissKeyboard}
+      disabled={Platform.OS === "web"}
+    >
       <Container>
         <KeyboardAvoidingView
           style={{ width: "100%" }}

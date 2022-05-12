@@ -19,7 +19,7 @@ export default function CreateAccount() {
       <TextInput
         autoFocus
         placeholder="First Name"
-        placeholderTextColor="gray"
+        placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
         autoCapitalize={false}
         onSubmitEditing={() => onNext(lastNameRef)}
@@ -27,7 +27,7 @@ export default function CreateAccount() {
       <TextInput
         ref={lastNameRef}
         placeholder="Last Name"
-        placeholderTextColor="gray"
+        placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
         autoCapitalize={false}
         onSubmitEditing={() => onNext(usernameRef)}
@@ -35,7 +35,7 @@ export default function CreateAccount() {
       <TextInput
         ref={usernameRef}
         placeholder="Username"
-        placeholderTextColor="gray"
+        placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
         autoCapitalize={false}
         onSubmitEditing={() => onNext(emailRef)}
@@ -43,7 +43,7 @@ export default function CreateAccount() {
       <TextInput
         ref={emailRef}
         placeholder="Email"
-        placeholderTextColor="gray"
+        placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
         keyboardType="email-address"
         autoCapitalize={false}
@@ -52,7 +52,7 @@ export default function CreateAccount() {
       <TextInput
         ref={passwordRef}
         placeholder="Password"
-        placeholderTextColor="gray"
+        placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         secureTextEntry
         returnKeyType="done"
         onSubmitEditing={onDone}

@@ -15,8 +15,8 @@ export default function Login({ navigation }) {
     console.log(data);
   };
   useEffect(() => {
-    register("username");
-    register("password");
+    register("username", { required: true });
+    register("password", { required: true });
   }, [register]);
   return (
     <AuthLayout>

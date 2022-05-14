@@ -27,7 +27,7 @@ export default function CreateAccount() {
   return (
     <AuthLayout>
       <TextInput
-        autoFocus
+        autoCorrect={false}
         placeholder="First Name"
         placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
@@ -37,6 +37,7 @@ export default function CreateAccount() {
       />
       <TextInput
         ref={lastNameRef}
+        autoCorrect={false}
         placeholder="Last Name"
         placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"
@@ -46,6 +47,7 @@ export default function CreateAccount() {
       />
       <TextInput
         ref={usernameRef}
+        autoCorrect={false}
         placeholder="Username"
         placeholderTextColor={"rgba(255, 255, 255, 0.6)"}
         returnKeyType="next"

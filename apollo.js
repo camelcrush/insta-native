@@ -21,7 +21,7 @@ export const logUserIn = async (token) => {
 export const logUserOut = async () => {
   await AsyncStorage.removeItem(TOKEN);
   isLoggedInVar(false);
-  tokenVar("");
+  tokenVar(null);
 };
 
 const httpLink = createHttpLink({ uri: "http://localhost:4000/graphql" });

@@ -1,6 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import { Text, View, FlatList } from "react-native";
+import Photo from "../components/Photo";
 import ScreenLayout from "../components/ScreenLayout";
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from "../fragments";
 
@@ -26,17 +27,13 @@ const FEED_QUERY = gql`
 
 export default function Feed({ navigation }) {
   const { data, error, loading } = useQuery(FEED_QUERY);
-  console.log(data);
   const renderPhoto = ({ item: photo }) => {
-    return (
-      <View style={{ flex: 1 }}>
-        <Text style={{ color: "white" }}>{photo.caption}</Text>
-      </View>
-    );
+    return <Photo {...photo} />;
   };
   return (
     <ScreenLayout loading={loading}>
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={data?.seeFeed}
         keyExtractor={(photo) => "" + photo.id}
         renderItem={renderPhoto}

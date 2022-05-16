@@ -5,6 +5,16 @@ import styled from "styled-components/native";
 import PropTypes from "prop-types";
 import { Image, useWindowDimensions } from "react-native";
 import { TouchableOpacity } from "react-native";
+import { gql, useMutation } from "@apollo/client";
+
+const TOGGLE_LIKE_MUTATION = gql`
+  mutation toggleLike($id: Int!) {
+    toggleLike(id: $id) {
+      ok
+      error
+    }
+  }
+`;
 
 const Container = styled.View``;
 const Header = styled.TouchableOpacity`
@@ -50,6 +60,37 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 450);
+  const updateToggleLike = (cache, result) => {
+    const {
+      data: {
+        toggleLike: { ok },
+      },
+    } = result;
+    if (ok) {
+      const photoId = `Photo:${id}`;
+      cache.modify({
+        id: photoId,
+        fields: {
+          isLiked(prev) {
+            return !prev;
+          },
+          likes(prev) {
+            if (isLiked) {
+              return prev - 1;
+            } else {
+              return prev + 1;
+            }
+          },
+        },
+      });
+    }
+  };
+  const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
+    variables: {
+      id,
+    },
+    update: updateToggleLike,
+  });
   // useEffect(() => {
   //   Image.getSize(file, (width, height) => {
   //     setImageHeight(height / 7);
@@ -68,7 +109,7 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
       />
       <ExtraContainer>
         <Actions>
-          <Action>
+          <Action onPress={toggleLikeMutation}>
             <Ionicons
               name={isLiked ? "heart" : "heart-outline"}
               color={isLiked ? "tomato" : "white"}

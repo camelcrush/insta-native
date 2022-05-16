@@ -50,11 +50,11 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
   const navigation = useNavigation();
   const { width, height } = useWindowDimensions();
   const [imageHeight, setImageHeight] = useState(height - 450);
-  useEffect(() => {
-    Image.getSize(file, (width, height) => {
-      setImageHeight(height / 7);
-    });
-  }, [file]);
+  // useEffect(() => {
+  //   Image.getSize(file, (width, height) => {
+  //     setImageHeight(height / 7);
+  //   });
+  // }, [file]);
   return (
     <Container>
       <Header onPress={() => navigation.navigate("Profile")}>

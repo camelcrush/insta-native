@@ -10,6 +10,7 @@ const FEED_QUERY = gql`
     seeFeed(offset: $offset) {
       ...PhotoFragment
       user {
+        id
         username
         avatar
       }
@@ -32,9 +33,9 @@ export default function Feed({ navigation }) {
     },
   });
   const [refreshing, setRefreshing] = useState(false);
-  const refresh = () => {
+  const refresh = async () => {
     setRefreshing(true);
-    refetch();
+    await refetch();
     setRefreshing(false);
   };
   const renderPhoto = ({ item: photo }) => {

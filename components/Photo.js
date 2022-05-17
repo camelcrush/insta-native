@@ -96,6 +96,12 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
   //     setImageHeight(height / 7);
   //   });
   // }, [file]);
+  const goToProfile = () => {
+    navigation.navigate("Profile", {
+      username: user.username,
+      id: user.id,
+    });
+  };
   return (
     <Container>
       <Header onPress={() => navigation.navigate("Profile")}>
@@ -120,7 +126,9 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
             <Ionicons name="chatbubble-outline" color="white" size={22} />
           </Action>
         </Actions>
-        <TouchableOpacity onPress={() => navigation.navigate("Likes")}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Likes", { photoId: id })}
+        >
           <Likes>{likes === 1 ? "1 Like" : `${likes} Likes`}</Likes>
         </TouchableOpacity>
         <Caption>

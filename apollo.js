@@ -7,7 +7,6 @@ import {
 import { setContext } from "@apollo/client/link/context";
 import { offsetLimitPagination } from "@apollo/client/utilities";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistCache, AsyncStorageWrapper } from "apollo3-cache-persist";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");

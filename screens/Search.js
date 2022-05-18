@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   TouchableOpacity,
-  TextInput,
   FlatList,
   View,
   Image,
@@ -76,7 +75,9 @@ export default function Search({ navigation }) {
     });
   }, []);
   const renderItem = ({ item: photo }) => (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Photo", { photoId: photo.id })}
+    >
       <Image
         source={{ uri: photo.file }}
         style={{ width: width / numColumns, height: height / 6 }}

@@ -39,22 +39,23 @@ export default function SelectPhoto({ navigation }) {
     }
   };
   const getPermissions = async () => {
-    const { accessPrivileges, canAskAgain } =
-      await MediaLibrary.getPermissionsAsync();
-    if (accessPrivileges === "none" && canAskAgain) {
-      const { accessPrivileges } = await MediaLibrary.requestPermissionsAsync();
-      if (accessPrivileges !== "none") {
-        setOk(true);
-        getPhotos();
+    const { status } = await MediaLibrary.getPermissionsAsync();
+    console.log(status);
+    if (status !== "granted") {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        return;
       }
-    } else if (accessPrivileges !== "none") {
+      setOk(true);
+      getPhotos();
+    } else if (status === "granted") {
       setOk(true);
       getPhotos();
     }
   };
   useEffect(() => {
     getPermissions();
-  }, []);
+  }, [ok]);
   const choosePhoto = (uri) => {
     setChosenPhoto(uri);
   };

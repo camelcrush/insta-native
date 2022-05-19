@@ -53,7 +53,6 @@ export default function SelectPhoto({ navigation }) {
   };
   const getPermissions = async () => {
     const { status } = await MediaLibrary.getPermissionsAsync();
-    console.log(status);
     if (status !== "granted") {
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status !== "granted") {

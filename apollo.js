@@ -25,7 +25,9 @@ export const logUserOut = async () => {
   tokenVar(null);
 };
 
-const httpLink = createHttpLink({ uri: "http://localhost:4000/graphql" });
+const httpLink = createHttpLink({
+  uri: "https://quick-bugs-knock-115-161-157-120.loca.lt/graphql",
+});
 
 const authLink = setContext((_, { headers }) => {
   return {

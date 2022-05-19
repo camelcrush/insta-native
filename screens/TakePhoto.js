@@ -32,8 +32,20 @@ const TakePhotoBtn = styled.TouchableOpacity`
   border-radius: 50px;
 `;
 
+const SliderContainer = styled.View``;
+const ActionsContainer = styled.View`
+  flex-direction: row;
+`;
+
+const CloseBtn = styled.TouchableOpacity`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+`;
+
 export default function TakePhoto({ navigation }) {
   const [ok, setOk] = useState(false);
+  const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
   const [zoom, setZoom] = useState(0);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
   const getPermissions = async () => {
@@ -53,23 +65,63 @@ export default function TakePhoto({ navigation }) {
   const onZoomValueChange = (e) => {
     setZoom(e);
   };
+  const onFlashChange = () => {
+    if (flashMode === Camera.Constants.FlashMode.off) {
+      setFlashMode(Camera.Constants.FlashMode.on);
+    } else if (flashMode === Camera.Constants.FlashMode.on) {
+      setFlashMode(Camera.Constants.FlashMode.auto);
+    } else if (flashMode === Camera.Constants.FlashMode.auto) {
+      setFlashMode(Camera.Constants.FlashMode.off);
+    }
+  };
   return (
     <Container>
-      <Camera type={cameraType} style={{ flex: 1 }} zoom={zoom} />
+      <Camera
+        type={cameraType}
+        style={{ flex: 1 }}
+        zoom={zoom}
+        flashMode={flashMode}
+      >
+        <CloseBtn onPress={() => navigation.navigate("Tabs")}>
+          <Ionicons name="close" color="rgba(255,255,255,0.7)" size={30} />
+        </CloseBtn>
+      </Camera>
       <Actions>
-        <Slider
-          style={{ width: 200, height: 20 }}
-          minimumValue={0}
-          maximumValue={1}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="rgba(255,255,255, 0.5)"
-          onValueChange={onZoomValueChange}
-        />
+        <SliderContainer>
+          <Slider
+            style={{ width: 200, height: 20 }}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="rgba(255,255,255, 0.5)"
+            onValueChange={onZoomValueChange}
+          />
+        </SliderContainer>
         <ButtonsContainer>
           <TakePhotoBtn />
-          <TouchableOpacity onPress={onCameraSwitch}>
-            <Ionicons size={30} color="white" name="camera-reverse" />
-          </TouchableOpacity>
+          <ActionsContainer>
+            <TouchableOpacity
+              onPress={onFlashChange}
+              style={{ marginRight: 30 }}
+            >
+              <Ionicons
+                size={30}
+                color="white"
+                name={
+                  flashMode === Camera.Constants.FlashMode.off
+                    ? "flash-off"
+                    : flashMode === Camera.Constants.FlashMode.on
+                    ? "flash"
+                    : flashMode === Camera.Constants.FlashMode.auto
+                    ? "eye"
+                    : ""
+                }
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onCameraSwitch}>
+              <Ionicons size={30} color="white" name="camera-reverse" />
+            </TouchableOpacity>
+          </ActionsContainer>
         </ButtonsContainer>
       </Actions>
     </Container>

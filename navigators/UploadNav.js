@@ -18,7 +18,7 @@ export default function UploadNav() {
         tabBarIndicatorStyle: { top: 0, backgroundColor: "white" },
       }}
     >
-      <Tab.Screen name="TabSelect">
+      <Tab.Screen name="Select">
         {() => (
           <Stack.Navigator
             screenOptions={{
@@ -31,7 +31,7 @@ export default function UploadNav() {
             }}
           >
             <Stack.Screen
-              name="Select"
+              name="StackSelect"
               options={{ title: "Choose a Photo" }}
               component={SelectPhoto}
             />

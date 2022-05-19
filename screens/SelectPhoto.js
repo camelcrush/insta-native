@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import * as MediaLibrary from "expo-media-library";
-import { FlatList, Image, useWindowDimensions } from "react-native";
+import {
+  FlatList,
+  Image,
+  useWindowDimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../colors";
 
 const Container = styled.View`
   flex: 1;
@@ -23,6 +29,13 @@ const IconContainer = styled.View`
   position: absolute;
   bottom: 5px;
   right: 0px;
+`;
+
+const HeaderRightText = styled.Text`
+  color: ${colors.blue};
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 8px;
 `;
 
 export default function SelectPhoto({ navigation }) {
@@ -53,9 +66,19 @@ export default function SelectPhoto({ navigation }) {
       getPhotos();
     }
   };
+  const HeaderRight = () => (
+    <TouchableOpacity>
+      <HeaderRightText>Next</HeaderRightText>
+    </TouchableOpacity>
+  );
   useEffect(() => {
     getPermissions();
   }, [ok]);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: HeaderRight,
+    });
+  }, []);
   const choosePhoto = (uri) => {
     setChosenPhoto(uri);
   };
@@ -66,7 +89,11 @@ export default function SelectPhoto({ navigation }) {
         style={{ width: width / numColumns, height: 100 }}
       />
       <IconContainer>
-        <Ionicons name="checkmark-circle" size={18} color="white" />
+        <Ionicons
+          name="checkmark-circle"
+          size={18}
+          color={photo.uri === chosenPhoto ? colors.blue : "white"}
+        />
       </IconContainer>
     </ImageContainer>
   );

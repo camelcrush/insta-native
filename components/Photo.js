@@ -104,7 +104,7 @@ export default function Photo({ id, user, caption, file, isLiked, likes }) {
   };
   return (
     <Container>
-      <Header onPress={() => navigation.navigate("Profile")}>
+      <Header onPress={goToProfile}>
         <UserAvatar resizeMode="cover" source={{ uri: user.avatar }} />
         <Username>{user.username}</Username>
       </Header>

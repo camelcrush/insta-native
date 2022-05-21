@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import ScreenLayout from "../components/ScreenLayout";
 import { KeyboardAvoidingView } from "react-native";
 
@@ -23,15 +23,29 @@ const ROOM_QUERY = gql`
 `;
 
 const MessageContainer = styled.View`
-  width: 100%;
+  padding: 0px 10px;
+  flex-direction: ${(props) => (props.outGoing ? "reverse-row" : "row")};
+  align-items: flex-end;
+  margin: 10px 10px;
 `;
 const Author = styled.View``;
-const Avatar = styled.Image``;
-const Username = styled.Text`
-  color: white;
+const Avatar = styled.Image`
+  height: 25px;
+  width: 25px;
+  border-radius: 20px;
 `;
 const Message = styled.Text`
   color: white;
+  font-size: 16px;
+  background-color: ${(props) =>
+    props.outGoing ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.3)"};
+  border: 1px solid
+    ${(props) =>
+      props.outGoing ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.3)"};
+  padding: 5px 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0px 10px;
 `;
 
 const TextInput = styled.TextInput`
@@ -56,12 +70,19 @@ export default function Room({ route, navigation }) {
     });
   }, []);
   const renderItem = ({ item: message }) => (
-    <MessageContainer>
-      <Author>
-        <Avatar source={{ uri: message.user.avatar }} />
-        <Username>{message.user.username}</Username>
-      </Author>
-      <Message>{message.payload}</Message>
+    <MessageContainer
+      outGoing={message.user.username !== route?.params?.talkingTo?.username}
+    >
+      {message.user.username == route?.params?.talkingTo?.username ? (
+        <Author>
+          <Avatar source={{ uri: message.user.avatar }} />
+        </Author>
+      ) : null}
+      <Message
+        outGoing={message.user.username !== route?.params?.talkingTo?.username}
+      >
+        {message.payload}
+      </Message>
     </MessageContainer>
   );
   return (

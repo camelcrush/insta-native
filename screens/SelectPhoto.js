@@ -44,6 +44,7 @@ export default function SelectPhoto({ navigation }) {
   const [ok, setOk] = useState(false);
   const [photos, setPhotos] = useState([]);
   const [chosenPhoto, setChosenPhoto] = useState("");
+  const [photoLocal, setPhotoLocal] = useState("");
   const getPhotos = async () => {
     if (ok) {
       const { assets: photos } = await MediaLibrary.getAssetsAsync();
@@ -67,7 +68,7 @@ export default function SelectPhoto({ navigation }) {
   };
   const HeaderRight = () => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("UploadForm", { file: chosenPhoto })}
+      onPress={() => navigation.navigate("UploadForm", { file: photoLocal })}
     >
       <HeaderRightText>Next</HeaderRightText>
     </TouchableOpacity>
@@ -79,12 +80,14 @@ export default function SelectPhoto({ navigation }) {
     navigation.setOptions({
       headerRight: HeaderRight,
     });
-  }, [chosenPhoto]);
-  const choosePhoto = (uri) => {
-    setChosenPhoto(uri);
+  }, [chosenPhoto, photoLocal]);
+  const choosePhoto = async (id) => {
+    const assetInfo = await MediaLibrary.getAssetInfoAsync(id);
+    setChosenPhoto(assetInfo.uri);
+    setPhotoLocal(assetInfo.localUri);
   };
   const renderItem = ({ item: photo }) => (
-    <ImageContainer onPress={() => choosePhoto(photo.uri)}>
+    <ImageContainer onPress={() => choosePhoto(photo.id)}>
       <Image
         source={{ uri: photo.uri }}
         style={{ width: width / numColumns, height: 100 }}

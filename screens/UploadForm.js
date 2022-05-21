@@ -9,7 +9,7 @@ import { colors } from "../colors";
 import { FEED_PHOTO } from "../fragments";
 
 const UPLOAD_PHOTO_MUTATION = gql`
-  mutation uploadPhoto($file: String!, $caption: String) {
+  mutation uploadPhoto($file: Upload!, $caption: String) {
     uploadPhoto(file: $file, caption: $caption) {
       ...FeedPhoto
     }
@@ -43,8 +43,27 @@ const HeaderRightText = styled.Text`
 `;
 
 export default function UploadForm({ route, navigation }) {
+  const updateUploadPhoto = (cache, result) => {
+    const {
+      data: { uploadPhoto },
+    } = result;
+    if (uploadPhoto.id) {
+      cache.modify({
+        id: "ROOT_QUERY",
+        fields: {
+          seeFeed(prev) {
+            return [uploadPhoto, ...prev];
+          },
+        },
+      });
+      navigation.navigate("Tabs");
+    }
+  };
   const [uploadPhotoMutation, { loading, error }] = useMutation(
-    UPLOAD_PHOTO_MUTATION
+    UPLOAD_PHOTO_MUTATION,
+    {
+      update: updateUploadPhoto,
+    }
   );
   const HeaderRight = () => (
     <TouchableOpacity onPress={handleSubmit(onValid)}>
@@ -69,7 +88,7 @@ export default function UploadForm({ route, navigation }) {
     const file = new ReactNativeFile({
       uri: route.params.file,
       name: "1.jpeg",
-      type: "image/jpeg",
+      type: "image/jpg",
     });
     uploadPhotoMutation({
       variables: {
@@ -84,6 +103,7 @@ export default function UploadForm({ route, navigation }) {
         <Photo resizeMode="contain" source={{ uri: route?.params?.file }} />
         <CaptionContainer>
           <Caption
+            autoCapitalize="none"
             returnKeyType="done"
             placeholder="Write a caption..."
             placeholderTextColor="rgba(0, 0, 0, 0.5)"

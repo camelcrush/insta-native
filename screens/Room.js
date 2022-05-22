@@ -1,5 +1,5 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import React, { useEffect } from "react";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { FlatList, View, KeyboardAvoidingView } from "react-native";
@@ -94,6 +94,7 @@ const InputContainer = styled.View`
 const SendButton = styled.TouchableOpacity``;
 
 export default function Room({ route, navigation }) {
+  const [subscribed, setSubscribed] = useState(false);
   const { data: meData } = useMe();
   const { register, setValue, handleSubmit, getValues, watch } = useForm();
   const updateSendMessage = (cache, result) => {
@@ -152,16 +153,59 @@ export default function Room({ route, navigation }) {
       id: route?.params?.id,
     },
   });
+  const client = useApolloClient();
+  const updateQuery = (prevQuery, options) => {
+    const {
+      subscriptionData: {
+        data: { roomUpdates: message },
+      },
+    } = options;
+    if (message.id) {
+      const incomingMessage = client.cache.writeFragment({
+        data: message,
+        fragment: gql`
+          fragment NewMessage on Message {
+            id
+            payload
+            user {
+              id
+              username
+              avatar
+            }
+            read
+          }
+        `,
+      });
+      client.cache.modify({
+        id: `Room:${route.params.id}`,
+        fields: {
+          messages(prev) {
+            // 실시간 subcribe로 인해 메세지가 cache로 들어오게 되는데 이 때 중복이 발생
+            // prev를 체크하여 cache가 중복되면 만들어놓은 fragment를 추가하지 않기.
+            const exisingMessage = prev.find(
+              (aMessage) => aMessage.__ref === incomingMessage.__ref
+            );
+            if (exisingMessage) {
+              return prev;
+            }
+            return [incomingMessage, ...prev];
+          },
+        },
+      });
+    }
+  };
   useEffect(() => {
-    if (data?.seeRoom) {
+    if (data?.seeRoom && !subscribed) {
       subscribeToMore({
         document: ROOM_UPDATES,
         variables: {
           id: route?.params?.id,
         },
+        updateQuery,
       });
+      setSubscribed(true);
     }
-  }, [data]);
+  }, [data, subscribed]);
 
   const onValid = ({ message }) => {
     if (!sendingMessage) {

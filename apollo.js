@@ -13,8 +13,7 @@ import {
 } from "@apollo/client/utilities";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createUploadLink } from "apollo-upload-client";
-import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { createClient } from "graphql-ws";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar("");
@@ -37,14 +36,15 @@ const uploadHttpLink = createUploadLink({
   uri: "http://localhost:4000/graphql",
 });
 
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: "ws://localhost:4000/subscriptions",
-    connectionParams: {
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:4000/graphql",
+  options: {
+    reconnect: true,
+    connectionParams: () => ({
       token: tokenVar(),
-    },
-  })
-);
+    }),
+  },
+});
 
 const authLink = setContext((_, { headers }) => {
   return {

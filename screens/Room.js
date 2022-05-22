@@ -1,5 +1,6 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import React, { useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import { FlatList, View, KeyboardAvoidingView } from "react-native";
 import ScreenLayout from "../components/ScreenLayout";
@@ -59,14 +60,23 @@ const Message = styled.Text`
 `;
 
 const TextInput = styled.TextInput`
-  margin-bottom: 50px;
-  margin-top: 25px;
-  width: 100%;
+  width: 90%;
   padding: 10px 20px;
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 1000px;
   color: white;
+  margin-right: 10px;
 `;
+
+const InputContainer = styled.View`
+  width: 100%;
+  margin-bottom: 50px;
+  margin-top: 25px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const SendButton = styled.TouchableOpacity``;
 
 export default function Room({ route, navigation }) {
   const { data: meData } = useMe();
@@ -110,7 +120,7 @@ export default function Room({ route, navigation }) {
         id: `Room:${route.params.id}`,
         fields: {
           messages(prev) {
-            return [...prev, messageFragment];
+            return [messageFragment, ...prev];
           },
         },
       });
@@ -171,23 +181,38 @@ export default function Room({ route, navigation }) {
         keyboardVerticalOffset={50}
       >
         <FlatList
-          style={{ width: "100%", marginTop: 10 }}
+          inverted
+          style={{ width: "100%", marginVertical: 10 }}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           data={data?.seeRoom?.messages}
           keyExtractor={(message) => message.id + ""}
           renderItem={renderItem}
         />
-        <TextInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Writing a message..."
-          placeholderTextColor="rgba(255, 255, 255, 0.5)"
-          returnKeyLabel="Send"
-          returnKeyType="send"
-          onChangeText={(text) => setValue("message", text)}
-          onSubmitEditing={handleSubmit(onValid)}
-          value={watch("message")}
-        />
+        <InputContainer>
+          <TextInput
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Writing a message..."
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            returnKeyLabel="Send"
+            returnKeyType="send"
+            onChangeText={(text) => setValue("message", text)}
+            onSubmitEditing={handleSubmit(onValid)}
+            value={watch("message")}
+          />
+          <SendButton
+            onPress={handleSubmit(onValid)}
+            disabled={!Boolean(watch("message"))}
+          >
+            <Ionicons
+              name="send"
+              size={22}
+              color={
+                !Boolean(watch("message")) ? "rgba(255,255,255,0.3)" : "white"
+              }
+            />
+          </SendButton>
+        </InputContainer>
       </KeyboardAvoidingView>
     </ScreenLayout>
   );

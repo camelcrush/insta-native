@@ -16,7 +16,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.camelcrush.instaz",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +27,8 @@
       }
     },
     "web": {
+      "package": "com.camelcrush.instz",
+      "versionCode": 1,
       "favicon": "./assets/favicon.png"
     }
   }

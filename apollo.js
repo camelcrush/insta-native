@@ -33,11 +33,11 @@ export const logUserOut = async () => {
 };
 
 const uploadHttpLink = createUploadLink({
-  uri: "http://localhost:4000/graphql",
+  uri: "https://insta-camelcrush.herokuapp.com/graphql",
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: "ws://insta-camelcrush.herokuapp.com/graphql",
   options: {
     reconnect: true,
     connectionParams: () => ({

@@ -21,14 +21,14 @@
       "buildNumber": "1.0.0"
     },
     "android": {
+      "package": "com.camelcrush.instaz",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "package": "com.camelcrush.instz",
-      "versionCode": 1,
       "favicon": "./assets/favicon.png"
     }
   }
